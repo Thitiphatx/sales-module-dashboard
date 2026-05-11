@@ -6,17 +6,16 @@ from typing import Optional
 from fastapi import Query
 from pydantic import BaseModel
 from datetime import datetime
+from decimal import Decimal
 
 class OrderStatus(str, Enum):
     pending = "pending"
     shipped = "shipped"
     cancelled = "cancelled"
 
-class OrderCreate(BaseModel):
-    customer_name: str
-    product_category: str
-    status: OrderStatus = OrderStatus.pending
-    total_amount: int
+class OrderChartDataGroupBy(str, Enum):
+    status = "status"
+    category = "category"
 
 class OrderResponse(BaseModel):
     order_id: int
@@ -24,6 +23,7 @@ class OrderResponse(BaseModel):
     customer_name: str
     product_category: str
     status: OrderStatus
+    total_amount: Decimal
 
     class Config:
         from_attributes = True
@@ -34,8 +34,8 @@ class OrderFilter:
         customer_name: Optional[str] = Query(default=None),
         product_category: Optional[str] = Query(default=None),
         status: Optional[OrderStatus] = Query(default=None),
-        min_amount: Optional[int] = Query(default=None),
-        max_amount: Optional[int] = Query(default=None),
+        min_amount: Optional[float] = Query(default=None),
+        max_amount: Optional[float] = Query(default=None),
         date_from: Optional[datetime] = Query(default=None),
         date_to: Optional[datetime] = Query(default=None),
     ):
@@ -46,3 +46,14 @@ class OrderFilter:
         self.max_amount = max_amount
         self.date_from = date_from
         self.date_to = date_to
+
+class OrderSummaryResponse(BaseModel):
+    total_revenue: Decimal
+    total_orders: int
+    average_order_value: Decimal
+    revenue_trend: Optional[float] = None
+    orders_trend: Optional[float] = None
+    aov_trend: Optional[float] = None
+
+class OrderChartDataResponse(OrderSummaryResponse):
+    label: str

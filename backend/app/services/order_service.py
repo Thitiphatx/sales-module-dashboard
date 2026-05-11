@@ -1,8 +1,10 @@
+from decimal import Decimal
 from fastapi_pagination.ext.sqlalchemy import paginate
+from sqlalchemy import func
 from sqlalchemy.orm import Session
-
 from app.models.order import Order
-from app.schemas.order_schema import OrderCreate, OrderFilter
+from app.schemas.order_schema import OrderChartDataGroupBy, OrderChartDataResponse, OrderFilter, OrderSummaryResponse
+from datetime import datetime, timedelta
 
 def get_orders(filters: OrderFilter, db: Session):
     query = db.query(Order)
@@ -24,18 +26,67 @@ def get_orders(filters: OrderFilter, db: Session):
 
     return paginate(db, query)
 
+def get_summary(db: Session) -> OrderSummaryResponse:
+    # Get current and previous month time ranges
+    now = datetime.now()
+    first_day_current = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    first_day_prev = (first_day_current - timedelta(days=1)).replace(day=1)
 
-def get_order(order_id: int, db: Session):
-    return db.query(Order).filter(Order.order_id == order_id).first()
+    # Current month
+    current_metrics = db.query(
+        func.sum(Order.total_amount).label("revenue"),
+        func.count(Order.order_id).label("orders"),
+        func.avg(Order.total_amount).label("aov")
+    ).filter(Order.date >= first_day_current).one()
 
-def create_order(order: OrderCreate, db: Session):
-    db_order = Order(
-        customer_name= order.customer_name,
-        product_category= order.product_category,
-        status= order.status,
-        total_amount= order.total_amount
+    # Previous month
+    prev_metrics = db.query(
+        func.sum(Order.total_amount).label("revenue"),
+        func.count(Order.order_id).label("orders"),
+        func.avg(Order.total_amount).label("aov")
+    ).filter(Order.date >= first_day_prev, Order.date < first_day_current).one()
+
+    # All
+    all = db.query(
+        func.sum(Order.total_amount).label("total_revenue"),
+        func.count(Order.order_id).label("total_orders"),
+        func.avg(Order.total_amount).label("average_order_value")
+    ).one()
+
+    def calculate_trend(current, prev):
+        if not prev or prev == 0:
+            return 0.0
+        return float(((current or 0) - prev) / prev * 100)
+
+    return OrderSummaryResponse(
+        total_revenue=all.total_revenue or Decimal("0"),
+        total_orders=all.total_orders,
+        average_order_value=all.average_order_value or Decimal("0"),
+        revenue_trend=calculate_trend(current_metrics.revenue, prev_metrics.revenue),
+        orders_trend=calculate_trend(current_metrics.orders, prev_metrics.orders),
+        aov_trend=calculate_trend(current_metrics.aov, prev_metrics.aov)
     )
-    db.add(db_order)
-    db.commit()
-    db.refresh(db_order)
-    return db_order
+
+def get_chart_data(group_by: OrderChartDataGroupBy, db: Session) -> list[OrderChartDataResponse]:
+    if group_by == OrderChartDataGroupBy.category:
+        group_col = Order.product_category
+    elif group_by == OrderChartDataGroupBy.status:
+        group_col = Order.status
+
+    results = db.query(
+        group_col.label("label"),
+        func.sum(Order.total_amount).label("total_revenue"),
+        func.count(Order.order_id).label("total_orders"),
+        func.avg(Order.total_amount).label("average_order_value")
+    ).group_by(group_col).all()
+
+    chart_data_list: list[OrderChartDataResponse] = []
+    for row in results:
+        chart_data_list.append(OrderChartDataResponse(
+            label=row.label,
+            total_revenue=row.total_revenue,
+            total_orders=row.total_orders,
+            average_order_value=row.average_order_value
+        ))
+
+    return chart_data_list

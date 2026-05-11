@@ -1,5 +1,5 @@
 import enum
-from sqlalchemy import Column, DateTime, Integer, String, func, Enum as SAEnum
+from sqlalchemy import Column, DateTime, Integer, String, func, Enum as SAEnum, Numeric
 from app.database import Base
 
 class OrderStatus(enum.Enum):
@@ -15,4 +15,4 @@ class Order(Base):
     customer_name = Column(String)
     product_category = Column(String)
     status = Column(SAEnum(OrderStatus), default=OrderStatus.pending)
-    total_amount = Column(Integer)
+    total_amount = Column(Numeric(14, 2))

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+  <title>Sales dashboard</title>
+</head>
+
+<body>
+  <header>
+    <h1>Sales Module Dashboard</h1>
+  </header>
+  <main id="app">
+    <!-- Summary Cards -->
+    <section id="summary-cards" class="summary-container">
+
+    </section>
+
+    <!-- Sales Chart -->
+    <section id="sales-chart" class="card chart-container">
+
+    </section>
+
+    <!-- Recent Sales -->
+    <section id="recent-sales" class="card recent-container">
+      <h3>Recent Sales</h3>
+      <form id="filter-form" class="filters-bar">
+        <div class="filter-item">
+          <label>Customer</label>
+          <input type="text" name="customer_name" placeholder="Customer name">
+        </div>
+        <div class="filter-item">
+          <label>Category</label>
+          <input type="text" name="product_category" placeholder="Category">
+        </div>
+        <div class="filter-item">
+          <label>Status</label>
+          <select name="status" id="filter-status">
+            <option value="">All</option>
+            <option value="pending">Pending</option>
+            <option value="shipped">Shipped</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <label>Date</label>
+          <div class="filter-group">
+            <input type="date" name="date_from">
+            <span class="separator">to</span>
+            <input type="date" name="date_to">
+          </div>
+        </div>
+        <div class="filter-item">
+          <label>Amount</label>
+          <div class="filter-group">
+            <input type="number" name="min_amount" placeholder="Min" step="1" min="0">
+            <span class="separator">-</span>
+            <input type="number" name="max_amount" placeholder="Max" step="1" min="0">
+          </div>
+        </div>
+        <div class="filter-item">
+          <label>Sort By</label>
+          <select name="status" id="filter-status">
+            <option value="id">ID</option>
+            <option value="date">Date</option>
+            <option value="customer_name">Customer</option>
+            <option value="product_category">Category</option>
+            <option value="total_amount">Total Amount</option>
+          </select>
+        </div>
+        <div class="action-group">
+          <button type="reset">Clear Filters</button>
+          <button type="submit" class="primary">Apply Filters</button>
+        </div>
+      </form>
+      <div id="recent-sales-table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Date</th>
+              <th>Customer</th>
+              <th>Category</th>
+              <th class="tag-column">Status</th>
+              <th class="amount-column">Total Amount (฿)</th>
+            </tr>
+          </thead>
+          <tbody id="recent-sales-tbody">
+          </tbody>
+        </table>
+      </div>
+      <div id="recent-sales-pagination-container" class="pagination-bar"></div>
+    </section>
+  </main>
+  <footer></footer>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

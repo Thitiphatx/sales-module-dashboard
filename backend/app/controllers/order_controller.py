@@ -1,24 +1,20 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from fastapi_pagination import Page
 from sqlalchemy.orm import Session
-from app.schemas.order_schema import OrderCreate, OrderFilter, OrderResponse
+from app.schemas.order_schema import OrderChartDataGroupBy, OrderChartDataResponse, OrderFilter, OrderResponse, OrderSummaryResponse
 from app.services import order_service
 from app.database import get_db
 
-
-router = APIRouter(prefix="/orders", tags=["orders"])
+router = APIRouter(prefix="/api/sales", tags=["sales"])
 
 @router.get("/", response_model=Page[OrderResponse])
 def get_orders(filters: OrderFilter = Depends(OrderFilter), db: Session = Depends(get_db)) -> Page[OrderResponse]:
     return order_service.get_orders(filters, db)
 
-@router.get("/{order_id}", response_model=OrderResponse)
-def get_order(order_id: int, db: Session = Depends(get_db)) -> OrderResponse:
-    order = order_service.get_order(order_id, db)
-    if not order:
-        raise HTTPException(status_code=404, detail="Order not found")
-    return order
+@router.get('/summary', response_model=OrderSummaryResponse)
+def get_summary(db: Session = Depends(get_db)) -> OrderSummaryResponse:
+    return order_service.get_summary(db)
 
-@router.post('/', response_model=OrderResponse)
-def create_order(order: OrderCreate, db: Session = Depends(get_db)):
-    return order_service.create_order(order, db)
+@router.get('/chart-data', response_model=list[OrderChartDataResponse])
+def get_chart_data(group_by: OrderChartDataGroupBy, db: Session = Depends(get_db)) -> list[OrderChartDataResponse]:
+    return order_service.get_chart_data(group_by, db)
