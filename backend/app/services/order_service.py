@@ -6,6 +6,15 @@ from app.models.order import Order
 from app.schemas.order_schema import OrderChartDataGroupBy, OrderChartDataResponse, OrderFilter, OrderSummaryResponse
 from datetime import datetime, timedelta
 
+SORT_COLUMN_MAP = {
+    'id': Order.order_id,
+    'date': Order.date,
+    'customer_name': Order.customer_name,
+    'product_category': Order.product_category,
+    'status': Order.status,
+    'total_amount': Order.total_amount,
+}
+
 def get_orders(filters: OrderFilter, db: Session):
     query = db.query(Order)
 
@@ -23,6 +32,12 @@ def get_orders(filters: OrderFilter, db: Session):
         query = query.filter(Order.date >= filters.date_from)
     if filters.date_to:
         query = query.filter(Order.date <= filters.date_to)
+
+    sort_column = SORT_COLUMN_MAP.get(filters.sort_by or 'id')
+    if filters.sort_order == 'desc':
+        query = query.order_by(sort_column.desc())
+    else:
+        query = query.order_by(sort_column.asc())
 
     return paginate(db, query)
 

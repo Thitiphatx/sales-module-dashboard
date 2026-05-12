@@ -15,17 +15,31 @@
 
 <body>
   <header>
-    <h1>Sales Module Dashboard</h1>
+    <div class="header-content">
+      <h1>Sales Module Dashboard</h1>
+      <p class="header-subtitle">Real-time sales overview and analytics</p>
+    </div>
   </header>
   <main id="app">
     <!-- Summary Cards -->
     <section id="summary-cards" class="summary-container">
-
     </section>
 
     <!-- Sales Chart -->
-    <section id="sales-chart" class="card chart-container">
-
+    <section id="sales-chart" class="chart-container">
+      <div class="card status-container">
+        <canvas id="status-chart"></canvas>
+      </div>
+      <div class="card category-container">
+        <canvas id="category-chart"></canvas>
+        <div>
+          <select id="chart-category-select">
+            <option value="total_orders">Total Orders</option>
+            <option value="total_revenue">Total Revenue</option>
+            <option value="average_order_value">Average Order Value</option>
+          </select>
+        </div>
+      </div>
     </section>
 
     <!-- Recent Sales -->
@@ -67,13 +81,19 @@
         </div>
         <div class="filter-item">
           <label>Sort By</label>
-          <select name="status" id="filter-status">
-            <option value="id">ID</option>
-            <option value="date">Date</option>
-            <option value="customer_name">Customer</option>
-            <option value="product_category">Category</option>
-            <option value="total_amount">Total Amount</option>
-          </select>
+          <div class="sort-group">
+            <select name="sort_by" id="filter-sort-by">
+              <option value="id">ID</option>
+              <option value="date">Date</option>
+              <option value="customer_name">Customer</option>
+              <option value="product_category">Category</option>
+              <option value="total_amount">Total Amount</option>
+            </select>
+            <select name="sort_order">
+              <option value="desc">Desc</option>
+              <option value="asc">Asc</option>
+            </select>
+          </div>
         </div>
         <div class="action-group">
           <button type="reset">Clear Filters</button>
@@ -99,7 +119,9 @@
       <div id="recent-sales-pagination-container" class="pagination-bar"></div>
     </section>
   </main>
-  <footer></footer>
+  <footer>
+    <p>&copy; 2026 Sales Module Dashboard. All rights reserved.</p>
+  </footer>
   <script type="module" src="/src/main.js"></script>
 </body>
 

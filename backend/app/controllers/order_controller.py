@@ -7,7 +7,7 @@ from app.database import get_db
 
 router = APIRouter(prefix="/api/sales", tags=["sales"])
 
-@router.get("/", response_model=Page[OrderResponse])
+@router.get("/recent", response_model=Page[OrderResponse])
 def get_orders(filters: OrderFilter = Depends(OrderFilter), db: Session = Depends(get_db)) -> Page[OrderResponse]:
     return order_service.get_orders(filters, db)
 

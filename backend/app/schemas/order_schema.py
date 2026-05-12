@@ -38,6 +38,8 @@ class OrderFilter:
         max_amount: Optional[float] = Query(default=None),
         date_from: Optional[datetime] = Query(default=None),
         date_to: Optional[datetime] = Query(default=None),
+        sort_by: Optional[str] = Query(default=None),
+        sort_order: Optional[str] = Query(default=None),
     ):
         self.customer_name = customer_name
         self.product_category = product_category
@@ -46,6 +48,8 @@ class OrderFilter:
         self.max_amount = max_amount
         self.date_from = date_from
         self.date_to = date_to
+        self.sort_by = sort_by
+        self.sort_order = sort_order
 
 class OrderSummaryResponse(BaseModel):
     total_revenue: Decimal
