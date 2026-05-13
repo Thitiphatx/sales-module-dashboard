@@ -33,7 +33,7 @@ def get_orders(filters: OrderFilter, db: Session):
     if filters.date_to:
         query = query.filter(Order.date <= filters.date_to)
 
-    sort_column = SORT_COLUMN_MAP.get(filters.sort_by or 'id')
+    sort_column = SORT_COLUMN_MAP.get(filters.sort_by or 'date')
     if filters.sort_order == 'desc':
         query = query.order_by(sort_column.desc())
     else:

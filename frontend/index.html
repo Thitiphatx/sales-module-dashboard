@@ -28,33 +28,45 @@
     <!-- Sales Chart -->
     <section id="sales-chart" class="chart-container">
       <div class="card status-container">
-        <canvas id="status-chart"></canvas>
+        <div class="card-header">
+          <h3>Sales Order Status Chart</h3>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="status-chart"></canvas>
+        </div>
       </div>
       <div class="card category-container">
-        <canvas id="category-chart"></canvas>
-        <div>
-          <select id="chart-category-select">
-            <option value="total_orders">Total Orders</option>
-            <option value="total_revenue">Total Revenue</option>
-            <option value="average_order_value">Average Order Value</option>
-          </select>
+        <div class="card-header">
+          <h3 id="category-chart-title">Sales Order Product Category Chart</h3>
+          <div>
+            <label>
+              Select Chart Value
+            </label>
+            <select id="chart-category-select" disabled>
+              <option value="total_orders">Total Orders</option>
+              <option value="total_revenue">Total Revenue</option>
+              <option value="average_order_value">Average Order Value</option>
+            </select>
+          </div>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="category-chart"></canvas>
         </div>
       </div>
     </section>
-
     <!-- Recent Sales -->
-    <section id="recent-sales" class="card recent-container">
+    <section id="recent-sales" class="card">
       <h3>Recent Sales</h3>
-      <form id="filter-form" class="filters-bar">
-        <div class="filter-item">
+      <form id="filter-form">
+        <div class="form-item">
           <label>Customer</label>
           <input type="text" name="customer_name" placeholder="Customer name">
         </div>
-        <div class="filter-item">
+        <div class="form-item">
           <label>Category</label>
           <input type="text" name="product_category" placeholder="Category">
         </div>
-        <div class="filter-item">
+        <div class="form-item">
           <label>Status</label>
           <select name="status" id="filter-status">
             <option value="">All</option>
@@ -63,40 +75,24 @@
             <option value="cancelled">Cancelled</option>
           </select>
         </div>
-        <div class="filter-item">
+        <div class="form-item">
           <label>Date</label>
-          <div class="filter-group">
+          <div class="form-group">
             <input type="date" name="date_from">
             <span class="separator">to</span>
             <input type="date" name="date_to">
           </div>
         </div>
-        <div class="filter-item">
+        <div class="form-item">
           <label>Amount</label>
-          <div class="filter-group">
+          <div class="form-group">
             <input type="number" name="min_amount" placeholder="Min" step="1" min="0">
             <span class="separator">-</span>
             <input type="number" name="max_amount" placeholder="Max" step="1" min="0">
           </div>
         </div>
-        <div class="filter-item">
-          <label>Sort By</label>
-          <div class="sort-group">
-            <select name="sort_by" id="filter-sort-by">
-              <option value="id">ID</option>
-              <option value="date">Date</option>
-              <option value="customer_name">Customer</option>
-              <option value="product_category">Category</option>
-              <option value="total_amount">Total Amount</option>
-            </select>
-            <select name="sort_order">
-              <option value="desc">Desc</option>
-              <option value="asc">Asc</option>
-            </select>
-          </div>
-        </div>
-        <div class="action-group">
-          <button type="reset">Clear Filters</button>
+        <div class="form-actions">
+          <button type="reset" disabled>Clear Filters</button>
           <button type="submit" class="primary">Apply Filters</button>
         </div>
       </form>
@@ -120,7 +116,7 @@
     </section>
   </main>
   <footer>
-    <p>&copy; 2026 Sales Module Dashboard. All rights reserved.</p>
+    <p>Sales Module Dashboard.</p>
   </footer>
   <script type="module" src="/src/main.js"></script>
 </body>

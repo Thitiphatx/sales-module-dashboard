@@ -13,18 +13,6 @@ let summaryData = {
 
 export async function initSummary() {
     const summaryContainer = document.getElementById("summary-cards");
-    console.log("Summary module initialized");
-    
-    // Render skeleton loader
-    summaryContainer.innerHTML = Array(3).fill(0).map(() => `
-        <div class="card">
-            <div class="card-header">
-                <div class="skeleton skeleton-text" style="width: 100px; height: 16px;"></div>
-            </div>
-            <div class="skeleton skeleton-value" style="width: 150px; height: 28px;"></div>
-            <div class="skeleton skeleton-trend" style="width: 120px; height: 14px;"></div>
-        </div>
-    `).join('');
 
     await getSummary();
     renderSummaryCard();
