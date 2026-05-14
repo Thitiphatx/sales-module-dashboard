@@ -31,7 +31,8 @@ def get_orders(filters: OrderFilter, db: Session):
     if filters.date_from:
         query = query.filter(Order.date >= filters.date_from)
     if filters.date_to:
-        query = query.filter(Order.date <= filters.date_to)
+        date_to_end_of_day = filters.date_to.replace(hour=23, minute=59, second=59, microsecond=999999)
+        query = query.filter(Order.date <= date_to_end_of_day)
 
     sort_column = SORT_COLUMN_MAP.get(filters.sort_by or 'date')
     if filters.sort_order == 'asc':
