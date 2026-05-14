@@ -130,7 +130,7 @@ table {
 
 :root {
     --color-success: #27d390;
-    --info: #ff9500;
+    --color-info: #ff9500;
     --color-error: #ff637d;
 }
 
