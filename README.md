@@ -31,8 +31,8 @@ sales-module-dashboard/
    ```
    Using `python`:
    ```bash
-   python -m venv .venv
    .venv\Scripts\activate  # Windows
+   python -m venv .venv
    ```
 
 3. **Install dependencies**:
