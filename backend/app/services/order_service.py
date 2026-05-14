@@ -34,10 +34,10 @@ def get_orders(filters: OrderFilter, db: Session):
         query = query.filter(Order.date <= filters.date_to)
 
     sort_column = SORT_COLUMN_MAP.get(filters.sort_by or 'date')
-    if filters.sort_order == 'desc':
-        query = query.order_by(sort_column.desc())
-    else:
+    if filters.sort_order == 'asc':
         query = query.order_by(sort_column.asc())
+    else:
+        query = query.order_by(sort_column.desc())
 
     return paginate(db, query)
 

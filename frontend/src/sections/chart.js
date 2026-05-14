@@ -87,6 +87,14 @@ async function renderDoughnutChart(ctx, chartData) {
                 legend: {
                     position: 'bottom',
                 },
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem, context) {
+                            const orderCount = tooltipItem.raw
+                            return `${orderCount} ${orderCount <= 1 ? 'order' : 'orders'}`
+                        }
+                    }
+                },
                 datalabels: {
                     color: '#fff',
                     font: {
@@ -147,7 +155,7 @@ function renderBarChart(ctx, chartData, field = "total_orders") {
     const fields = {
         "total_orders": {
             label: "Total Orders",
-            unit: "Order"
+            unit: "order"
         },
         "total_revenue": {
             label: "Total Revenue (฿)",
@@ -183,13 +191,13 @@ function renderBarChart(ctx, chartData, field = "total_orders") {
                     callbacks: {
                         label: function (context) {
                             const value = context.parsed.y;
-
                             // if field is currency convert to currency string
                             if (field === 'total_revenue' || field === 'average_order_value') {
                                 return `${formatTHB(value)}`;
-                            } else {
-                                return `${value} ${fields[field].unit}`;
+                            } else if (field === 'total_orders') {
+                                return `${value} ${value <= 1 ? 'order' : 'orders'}`;
                             }
+                            return value
                         }
                     }
                 },

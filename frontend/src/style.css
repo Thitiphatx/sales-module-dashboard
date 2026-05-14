@@ -632,4 +632,20 @@ table td:nth-child(6) {
     .form-actions {
         grid-column: span 1;
     }
+
+    .table-footer {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 300px) {
+    .pagination-controls {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
 }
